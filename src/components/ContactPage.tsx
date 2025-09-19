@@ -66,9 +66,8 @@ export function ContactPage() {
   ];
 
   const businessHours = [
-    { day: "월-금", time: "10:00 - 19:00", available: true },
-    { day: "토요일", time: "10:00 - 17:00", available: true },
-    { day: "일요일", time: "휴무 (메시지 확인)", available: false }
+    { day: "월-금", time: "10:00 - 18:00", available: true },
+    { day: "토요일 - 일요일", time: "휴무 (메시지 확인)", available: false },
   ];
 
   const storyTypes = [
@@ -127,7 +126,7 @@ export function ContactPage() {
                   {/* Personal Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name">성함 *</Label>
+                      <Label className='mb-2' htmlFor="name">성함 *</Label>
                       <Input
                         id="name"
                         value={formData.name}
@@ -137,7 +136,7 @@ export function ContactPage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="phone">연락처 *</Label>
+                      <Label className='mb-2' htmlFor="phone">연락처 *</Label>
                       <Input
                         id="phone"
                         type="tel"
@@ -150,7 +149,7 @@ export function ContactPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="email">이메일</Label>
+                    <Label className='mb-2' htmlFor="email">이메일</Label>
                     <Input
                       id="email"
                       type="email"
@@ -163,7 +162,7 @@ export function ContactPage() {
                   {/* Story Details */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="storyType">이야기 종류</Label>
+                      <Label className='mb-2' htmlFor="storyType">이야기 종류</Label>
                       <Select onValueChange={(value) => handleInputChange('storyType', value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="어떤 이야기인가요?" />
@@ -178,7 +177,7 @@ export function ContactPage() {
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="desiredDate">언제 필요하신가요? *</Label>
+                      <Label className='mb-2' htmlFor="desiredDate">언제 필요하신가요? *</Label>
                       <Input
                         id="desiredDate"
                         type="date"
@@ -190,7 +189,7 @@ export function ContactPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="story">이야기를 들려주세요 *</Label>
+                    <Label className='mb-2' htmlFor="story">이야기를 들려주세요 *</Label>
                     <Textarea
                       id="story"
                       value={formData.story}
@@ -202,7 +201,7 @@ export function ContactPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="feeling">전하고 싶은 감정</Label>
+                    <Label className='mb-2' htmlFor="feeling">전하고 싶은 감정</Label>
                     <Input
                       id="feeling"
                       value={formData.feeling}
@@ -212,7 +211,7 @@ export function ContactPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="message">토퍼에 들어갈 문구나 추가 요청사항</Label>
+                    <Label className='mb-2' htmlFor="message">토퍼에 들어갈 문구나 추가 요청사항</Label>
                     <Textarea
                       id="message"
                       value={formData.message}
@@ -291,39 +290,10 @@ export function ContactPage() {
                   ))}
                 </div>
                 <div className="mt-4 p-3 bg-amber-50 rounded-lg">
-                  <p className="text-sm text-amber-700">
-                    💝 언제든 메시지를 보내주세요. 
-                    상담 시간 외에도 이야기를 받고 있으며, 
-                    다음 영업일에 정성스럽게 답변드립니다.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Location Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <MapPin className="text-amber-600" size={20} />
-                  <span>토리토리 작업실</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <p className="text-gray-700">서울시 강남구 이야기로 123</p>
-                  <p className="text-gray-600 text-sm">토리토리 스토리 작업실</p>
-                  <div className="text-sm text-gray-500 space-y-1">
-                    <p>지하철: 2호선 강남역 3번 출구 도보 5분</p>
-                    <p>버스: 강남역 정류장 하차</p>
-                    <p>주차: 건물 지하 주차장 이용 가능</p>
-                  </div>
-                </div>
-                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                  <p className="text-sm text-blue-700">
-                    🏠 직접 방문하셔서 이야기를 나누고 싶으시면 
-                    미리 연락 주셔서 시간을 예약해주세요. 
-                    실제 토퍼들도 보실 수 있습니다.
-                  </p>
+                  <ul className="text-sm text-amber-700 space-y-2">
+                    <li>💝 언제든 메시지를 보내주세요.</li>
+                    <li>상담 시간 외에도 이야기를 받고 있으며, 다음 영업일에 정성스럽게 답변드립니다.</li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>

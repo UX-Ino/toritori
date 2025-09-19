@@ -45,7 +45,7 @@ export function Footer() {
             </div>
             <div className="text-xs text-gray-500 space-y-1">
               <p>상호: 토리토리</p>
-              <p>대표: 김○○</p>
+              <p>대표: 박선미</p>
               <p>사업자등록번호: 000-00-00000</p>
             </div>
           </div>
@@ -54,11 +54,11 @@ export function Footer() {
         <div className="border-t border-amber-200 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-xs text-gray-500">
-              © 2024 토리토리. All rights reserved.
+              © 2025 토리토리. All rights reserved.
             </p>
             <div className="flex space-x-4 text-xs text-gray-500">
-              <a href="#" className="hover:text-gray-700">이용약관</a>
-              <a href="#" className="hover:text-gray-700">개인정보처리방침</a>
+              <a href="/terms" className="hover:text-gray-700">이용약관</a>
+              <a href="/privacy" className="hover:text-gray-700">개인정보처리방침</a>
             </div>
           </div>
         </div>

@@ -332,7 +332,7 @@ export function OrderGuidePage({ onNavigate }: OrderGuidePageProps) {
               onClick={() => onNavigate('portfolio')}
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-amber-600"
+              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
             >
               다른 이야기들 보기
             </Button>
