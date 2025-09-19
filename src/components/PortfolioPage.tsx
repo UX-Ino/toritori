@@ -6,7 +6,12 @@ import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
-export function PortfolioPage() {
+
+interface PortfolioPageProps {
+  onNavigate: (page: string) => void;
+}
+
+export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
   const [activeFilter, setActiveFilter] = useState('전체');
 
   const categories = ['전체', '생일', '웨딩', '기념일', '베이비', '가족', '특별한 순간'];
@@ -151,9 +156,9 @@ export function PortfolioPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {filteredItems.map((item) => (
               <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
-                <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                   {/* Image */}
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden ">
                     <ImageWithFallback 
                       src={item.image}
                       alt={item.title}
@@ -268,6 +273,7 @@ export function PortfolioPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
+              onClick={() => onNavigate('contact')}
               size="lg"
               variant="secondary"
               className="bg-white text-amber-600 hover:bg-amber-50"
@@ -275,6 +281,7 @@ export function PortfolioPage() {
               나의 이야기 시작하기
             </Button>
             <Button 
+              onClick={() => onNavigate('order')}
               size="lg"
               variant="outline"
               className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
