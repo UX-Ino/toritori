@@ -321,7 +321,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               onClick={() => onNavigate('about')}
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-amber-600"
+              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
             >
               토리토리 이야기 보기
             </Button>

@@ -105,40 +105,6 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-20 bg-amber-25">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl text-gray-800 mb-4">
-              토리토리의 여정
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              작은 시작에서 큰 꿈까지, 우리가 걸어온 의미있는 순간들
-            </p>
-          </div>
-          
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-amber-200"></div>
-            <div className="space-y-12">
-              {milestones.map((milestone, index) => (
-                <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                    <Card className="bg-white shadow-lg">
-                      <CardContent className="p-6">
-                        <div className="text-2xl font-bold text-amber-600 mb-2">{milestone.year}</div>
-                        <h3 className="text-xl text-gray-800 mb-3">{milestone.title}</h3>
-                        <p className="text-gray-600 leading-relaxed">{milestone.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="relative z-10 w-4 h-4 bg-amber-500 rounded-full border-4 border-white shadow-lg"></div>
-                  <div className="w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Core Values */}
       <section className="py-20 bg-white">
@@ -248,14 +214,14 @@ export function AboutPage() {
                   
                   <div className="md:col-span-2 space-y-4">
                     <div>
-                      <h3 className="text-2xl text-gray-800 mb-2">김지혜 대표</h3>
+                      <h3 className="text-2xl text-gray-800 mb-2">박선미 대표</h3>
                       <p className="text-amber-600 mb-4">이야기 수집가 & 토퍼 아티스트</p>
                     </div>
                     
                     <div className="space-y-3 text-gray-600 leading-relaxed">
                       <p>
-                        안녕하세요, 토리토리의 김지혜입니다. 
-                        저는 사람들의 이야기를 듣는 것을 가장 좋아합니다. 
+                        안녕하세요, 토리토리의 박선미입니다.
+                        저는 사람들의 이야기를 듣는 것을 가장 좋아합니다.
                         특히 그 안에 담긴 사랑과 추억을 발견할 때면 마음이 설렙니다.
                       </p>
                       <p>
@@ -270,7 +236,7 @@ export function AboutPage() {
                     </div>
                     
                     <div className="flex flex-wrap gap-2 pt-4">
-                      <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">미술 전공</span>
+                      <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">UX 전공</span>
                       <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">이야기 수집가</span>
                       <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">감동 전달자</span>
                     </div>
@@ -299,7 +265,7 @@ export function AboutPage() {
               <p className="text-amber-100">고객 만족도</p>
             </div>
             <div className="text-white">
-              <p className="text-4xl font-semibold mb-2">2년+</p>
+              <p className="text-4xl font-semibold mb-2">지금부터+</p>
               <p className="text-amber-100">감동의 여정</p>
             </div>
             <div className="text-white">

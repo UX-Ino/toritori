@@ -277,7 +277,7 @@ export function PortfolioPage() {
             <Button 
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-amber-600"
+              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
             >
               주문 과정 알아보기
             </Button>
