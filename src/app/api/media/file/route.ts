@@ -39,11 +39,23 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'SIGN_FAILED' }, { status: 502 });
     }
     const data = await signRes.json();
-    const signedPath = data?.signedURL || data?.signedUrl || data?.url;
+    const signedPath: string | undefined = data?.signedURL || data?.signedUrl || data?.url;
     if (!signedPath) {
       return NextResponse.json({ error: 'INVALID_SIGN_RESPONSE', data }, { status: 502 });
     }
-    const absolute = signedPath.startsWith('http') ? signedPath : `${SUPABASE_URL}${signedPath}`;
+    // Supabase returns signedPath like "/object/sign/<bucket>/<path>?token=..."
+    // It must be prefixed with "/storage/v1" to be a valid absolute URL.
+    let absolute: string;
+    if (signedPath.startsWith('http')) {
+      absolute = signedPath;
+    } else if (signedPath.startsWith('/object/')) {
+      absolute = `${SUPABASE_URL}/storage/v1${signedPath}`;
+    } else if (signedPath.startsWith('/storage/')) {
+      absolute = `${SUPABASE_URL}${signedPath}`;
+    } else {
+      // Fallback
+      absolute = `${SUPABASE_URL}/storage/v1${signedPath.startsWith('/') ? '' : '/'}${signedPath}`;
+    }
     if (debug) {
       return NextResponse.json({ ok: true, absolute, signedPath, bucket: SUPABASE_BUCKET, path });
     }
