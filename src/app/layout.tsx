@@ -1,20 +1,25 @@
 export const metadata = {
-  title: 'Brand Website Development PRD',
+  title: '토리토리 이야기 | Toritori Story',
   description: 'Toritori — Next.js app',
 };
 
-import '../styles/globals.css';
 import '../index.css';
-import { Footer } from '@/components/Footer';
-import NextHeader from '@/components/NextHeader';
+import '../styles/globals.css';
+import '../styles/tw.css';
+import LayoutChrome from '@/components/LayoutChrome';
+import { cookies } from 'next/headers';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Admin mode detection: cookie or env fallback
+  const cookieStore = cookies();
+  const adminCookie = cookieStore.get('admin')?.value || cookieStore.get('isAdminMode')?.value;
+  const isAdminMode =
+    adminCookie === '1' || adminCookie === 'true' || process.env.ADMIN_MODE === 'true';
+
   return (
     <html lang="ko">
       <body className="min-h-screen bg-white">
-        <NextHeader />
-        <main>{children}</main>
-        <Footer />
+        <LayoutChrome isAdminMode={isAdminMode}>{children}</LayoutChrome>
       </body>
     </html>
   );

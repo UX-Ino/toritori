@@ -215,7 +215,7 @@ export function OrderGuidePage({ onNavigate }: OrderGuidePageProps) {
                     ))}
                   </ul>
                   <Button 
-                    className={`w-full ${option.popular ? 'bg-amber-600 hover:bg-amber-700' : 'bg-gray-600 hover:bg-gray-700'}`}
+                    className={`w-full ${option.popular ? 'text-white bg-amber-600 hover:bg-amber-700' : 'text-white bg-gray-600 hover:bg-gray-700'}`}
                     onClick={() => onNavigate('contact')}
                   >
                     이 옵션으로 시작하기
@@ -332,7 +332,7 @@ export function OrderGuidePage({ onNavigate }: OrderGuidePageProps) {
               onClick={() => onNavigate('portfolio')}
               size="lg"
               variant="outline"
-              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
+              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50 hover:text-amber-600"
             >
               다른 이야기들 보기
             </Button>

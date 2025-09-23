@@ -187,3 +187,22 @@
 html {
   font-size: var(--font-size);
 }
+
+/* Utilities fallback for classes missing in prebuilt index.css */
+@layer utilities {
+  .fixed { position: fixed; }
+  .absolute { position: absolute; }
+  .bottom-4 { bottom: calc(var(--spacing) * 4); }
+  .w-3 { width: calc(var(--spacing) * 3); }
+  .h-3 { height: calc(var(--spacing) * 3); }
+  .h-28 { height: calc(var(--spacing) * 28); }
+  .bg-amber-25 { background-color: var(--color-amber-25, #fff6e6); }
+  .to-yellow-25 {
+    --tw-gradient-to: var(--color-yellow-25, #fffbe6);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .hover\:opacity-100:hover { opacity: 1; }
+  .group:hover .group-hover\:opacity-100 { opacity: 1; }
+  .group:hover .group-hover\:bg-black\/20 { background-color: rgba(0,0,0,.2); }
+  .group:hover .group-hover\:scale-110 { transform: scale(1.10); }
+}

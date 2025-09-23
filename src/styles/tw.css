@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Tell Tailwind v4 where to scan for classes */
+@source "../**/*.{ts,tsx}";
+
+/* Keep using our existing design tokens from globals via CSS vars */
+

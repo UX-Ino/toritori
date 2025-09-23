@@ -1,10 +1,11 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Filter, Heart, BookOpen, Star } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Skeleton } from './ui/skeleton';
 
 
 interface PortfolioPageProps {
@@ -13,92 +14,64 @@ interface PortfolioPageProps {
 
 export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
   const [activeFilter, setActiveFilter] = useState('전체');
+  const [categories, setCategories] = useState<string[]>(['전체']);
+  const [storyItems, setStoryItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const categories = ['전체', '생일', '웨딩', '기념일', '베이비', '가족', '특별한 순간'];
+  // Fetch from Notion-backed API and hydrate categories + items
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/portfolio', { cache: 'no-store' });
+        if (!res.ok) {
+          // Try to surface server error details from the API route
+          let message = '포트폴리오 데이터를 불러오지 못했습니다.';
+          try {
+            const err = await res.json();
+            message = err?.details || err?.error || message;
+          } catch {}
+          throw new Error(message);
+        }
+        const data = await res.json();
+        if (cancelled) return;
+        setStoryItems(Array.isArray(data?.items) ? data.items : []);
+        setCategories(Array.isArray(data?.categories) && data.categories.length ? data.categories : ['전체']);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message || '알 수 없는 오류가 발생했습니다.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const storyItems = [
-    {
-      id: 1,
-      title: "첫 번째 생일",
-      category: "생일",
-      image: "https://images.unsplash.com/photo-1753742731319-70f5c9908b6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWtlJTIwdG9wcGVyJTIwYmlydGhkYXklMjBjZWxlYnJhdGlvbnxlbnwxfHx8fDE3NTgyNDk5MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "엄마가 품에서 키운 아이가 처음으로 맞는 생일. 한 글자 한 글자에 엄마의 사랑과 바람을 담아 만든 특별한 토퍼입니다.",
-      emotion: "사랑과 희망",
-      message: "우리 아기의 첫 번째 생일을 축하해"
-    },
-    {
-      id: 2,
-      title: "영원한 약속",
-      category: "웨딩",
-      image: "https://images.unsplash.com/photo-1653936639896-be9d0aaf1c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY2FrZSUyMGVsZWdhbnQlMjB0b3BwZXJ8ZW58MXx8fHwxNzU4MjQ5OTMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "7년의 연애 끝에 결혼을 앞둔 커플. 두 사람의 이름이 하나로 이어지는 순간을 영원히 기억하고 싶다는 마음을 담았습니다.",
-      emotion: "영원한 사랑",
-      message: "지수 ♥ 민호, Forever"
-    },
-    {
-      id: 3,
-      title: "새 생명의 축복",
-      category: "베이비",
-      image: "https://images.unsplash.com/photo-1594150278354-25ed522676ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWJ5JTIwc2hvd2VyJTIwY2FrZSUyMGRlY29yYXRpb25zfGVufDF8fHx8MTc1ODI0OTkzNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "곧 태어날 아기를 위한 베이비 샤워 파티. 가족과 친구들의 축복과 기대를 담아 따뜻한 마음으로 준비한 토퍼입니다.",
-      emotion: "기대와 축복",
-      message: "Welcome Baby"
-    },
-    {
-      id: 4,
-      title: "소중한 기념일",
-      category: "기념일",
-      image: "https://images.unsplash.com/photo-1733515371242-2c7f8255fde6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhbm5pdmVyc2FyeSUyMGNlbGVicmF0aW9uJTIwY2FrZXxlbnwxfHx8fDE3NTgyNDk5NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "결혼 3주년을 맞은 부부. 첫 만남부터 지금까지의 소중한 추억들을 돌아보며, 앞으로도 함께 걸어갈 다짐을 담았습니다.",
-      emotion: "고마움과 약속",
-      message: "3년째, 여전히 설레는 우리"
-    },
-    {
-      id: 5,
-      title: "할머니의 80번째 생일",
-      category: "가족",
-      image: "https://images.unsplash.com/photo-1753742731099-028d1a0555fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiaXJ0aGRheSUyMHBhcnR5JTIwdGFibGUlMjBzZXR1cHxlbnwxfHx8fDE3NTgyNDk5NTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "온 가족이 모여 축하하는 할머니의 팔순잔치. 평생 가족을 위해 헌신하신 할머니에 대한 감사와 사랑을 전하는 토퍼입니다.",
-      emotion: "존경과 감사",
-      message: "할머니 사랑해요"
-    },
-    {
-      id: 6,
-      title: "첫 돌잔치",
-      category: "생일",
-      image: "https://images.unsplash.com/photo-1649126927007-73d0b082d302?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwcGFydHklMjBkZWNvcmF0aW9ucyUyMHBhc3RlbHxlbnwxfHx8fDE3NTgyNDk5MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "건강하게 첫 돌를 맞은 아기. 부모님의 간절한 기도와 사랑이 담긴 특별한 날을 기념하는 의미있는 토퍼입니다.",
-      emotion: "기쁨과 감사",
-      message: "건강하게 자라줘서 고마워"
-    },
-    {
-      id: 7,
-      title: "졸업 축하",
-      category: "특별한 순간",
-      image: "https://images.unsplash.com/photo-1753742731319-70f5c9908b6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWtlJTIwdG9wcGVyJTIwYmlydGhkYXklMjBjZWxlYnJhdGlvbnxlbnwxfHx8fDE3NTgyNDk5MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "대학 졸업을 앞둔 딸을 위해 부모님이 준비한 깜짝 파티. 힘든 공부를 끝까지 해낸 딸에 대한 자랑스러움을 담았습니다.",
-      emotion: "자랑스러움",
-      message: "수고했어, 우리 딸"
-    },
-    {
-      id: 8,
-      title: "은혼식 축하",
-      category: "기념일",
-      image: "https://images.unsplash.com/photo-1733515371242-2c7f8255fde6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhbm5pdmVyc2FyeSUyMGNlbGVicmF0aW9uJTIwY2FrZXxlbnwxfHx8fDE3NTgyNDk5NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "결혼 25주년을 맞은 부모님을 위해 자녀들이 준비한 은혼식 파티. 변함없는 사랑과 앞으로의 행복을 기원하는 마음을 담았습니다.",
-      emotion: "변함없는 사랑",
-      message: "25년째 변함없는 사랑"
-    },
-    {
-      id: 9,
-      title: "반려동물과의 추억",
-      category: "특별한 순간",
-      image: "https://images.unsplash.com/photo-1594150278354-25ed522676ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWJ5JTIwc2hvd2VyJTIwY2FrZSUyMGRlY29yYXRpb25zfGVufDF8fHx8MTc1ODI0OTkzNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      story: "15년간 함께한 반려견의 생일을 축하하며, 지금까지의 소중한 추억과 앞으로도 함께할 시간에 대한 감사를 표현했습니다.",
-      emotion: "깊은 사랑",
-      message: "똘이야, 생일 축하해"
+  const reload = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/portfolio', { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+      if (!res.ok) {
+        let message = '포트폴리오 데이터를 불러오지 못했습니다.';
+        try {
+          const err = await res.json();
+          message = err?.details || err?.error || message;
+        } catch {}
+        throw new Error(message);
+      }
+      const data = await res.json();
+      setStoryItems(Array.isArray(data?.items) ? data.items : []);
+      setCategories(Array.isArray(data?.categories) && data.categories.length ? data.categories : ['전체']);
+    } catch (e: any) {
+      setError(e?.message || '알 수 없는 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const filteredItems = activeFilter === '전체' 
     ? storyItems 
@@ -126,9 +99,12 @@ export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
               <Filter size={20} className="text-gray-500" />
               <span className="text-gray-600">이야기 종류별 보기</span>
             </div>
-            <p className="text-sm text-gray-500">
-              총 {filteredItems.length}개의 이야기
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="text-sm text-gray-500">총 {filteredItems.length}개의 이야기</p>
+              <Button variant="outline" size="sm" onClick={reload} className="border-amber-200 text-amber-700 hover:bg-amber-50">
+                새로고침
+              </Button>
+            </div>
           </div>
           
           <div className="flex flex-wrap gap-2">
@@ -139,7 +115,7 @@ export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
                 size="sm"
                 onClick={() => setActiveFilter(category)}
                 className={activeFilter === category 
-                  ? "bg-amber-600 hover:bg-amber-700" 
+                  ? "bg-amber-600 hover:bg-amber-700 text-white" 
                   : "border-amber-200 text-amber-700 hover:bg-amber-50"
                 }
               >
@@ -154,13 +130,42 @@ export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {filteredItems.map((item) => (
+            {loading && (
+              <>
+                {[...Array(4)].map((_, i) => (
+                  <Card key={`skeleton-${i}`} className="overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                      <div className="relative">
+                        <Skeleton className="h-64 w-full" />
+                      </div>
+                      <CardContent className="p-6 space-y-3">
+                        <Skeleton className="h-5 w-40" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-5/6" />
+                        <div className="flex gap-2">
+                          <Skeleton className="h-6 w-16" />
+                          <Skeleton className="h-6 w-20" />
+                        </div>
+                      </CardContent>
+                    </div>
+                  </Card>
+                ))}
+              </>
+            )}
+
+            {!loading && filteredItems.length === 0 && (
+              <div className="col-span-1 lg:col-span-2 text-center text-gray-500 py-12">
+                {error ? error : '표시할 이야기가 없습니다.'}
+              </div>
+            )}
+
+            {!loading && filteredItems.map((item) => (
               <Card key={item.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                   {/* Image */}
                   <div className="relative overflow-hidden ">
                     <ImageWithFallback 
-                      src={item.image}
+                      src={item.image || ''}
                       alt={item.title}
                       className="w-full h-64 md:h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -170,9 +175,7 @@ export function PortfolioPage({ onNavigate }: PortfolioPageProps) {
                         {item.category}
                       </Badge>
                     </div>
-                    <button className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white">
-                      <Heart size={16} className="text-amber-600" />
-                    </button>
+             
                   </div>
                   
                   {/* Story Content */}

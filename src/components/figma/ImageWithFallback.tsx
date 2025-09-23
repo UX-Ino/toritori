@@ -12,6 +12,15 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
   }
 
   const { src, alt, style, className, ...rest } = props
+  let finalSrc = src as string | undefined
+  if (!didError && typeof finalSrc === 'string' && finalSrc.length > 0) {
+    const lower = finalSrc.toLowerCase()
+    const isHttp = lower.startsWith('http://') || lower.startsWith('https://') || lower.startsWith('data:')
+    if (!isHttp) {
+      const encoded = encodeURIComponent(finalSrc)
+      finalSrc = `/api/media/file?path=${encoded}`
+    }
+  }
 
   return didError ? (
     <div
@@ -23,6 +32,6 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
       </div>
     </div>
   ) : (
-    <img src={src} alt={alt} className={className} style={style} {...rest} onError={handleError} />
+    <img src={finalSrc} alt={alt} className={className} style={style} {...rest} onError={handleError} />
   )
 }

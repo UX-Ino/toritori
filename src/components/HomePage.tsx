@@ -99,7 +99,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <Button 
               onClick={() => onNavigate('portfolio')}
               size="lg"
-              className="bg-amber-600 hover:bg-amber-700"
+              className="bg-amber-600 text-white hover:bg-amber-700"
             >
               작품 이야기 보기
               <ArrowRight className="ml-2" size={20} />
@@ -321,7 +321,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               onClick={() => onNavigate('about')}
               size="lg"
               variant="outline"
-              className="border-white text-amber-50 hover:bg-white hover:bg-amber-50"
+              className="border-white text-white hover:bg-white hover:text-amber-600"
             >
               토리토리 이야기 보기
             </Button>

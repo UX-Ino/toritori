@@ -59,3 +59,61 @@ or initiating processes. They communicate interactivity and should have clear, a
   * Visual Style : Text-only with no border, using primary color
   * Usage : For actions that should be available but not emphasized
 -->
+
+# Notion Integration (Portfolio)
+
+- API route: `src/app/api/portfolio/route.ts` queries Notion and returns `{ items, categories }`.
+- Env vars required (add to `.env.local`):
+  - `NOTION_API_KEY`: Notion internal integration token (secret).
+  - `NOTION_DATABASE_ID`: Database ID containing portfolio rows.
+- Expected Notion database properties (names can be localized; handler is flexible):
+  - Title: type `title` (used for `title`).
+  - Category: type `select` or `multi_select` (first value used for `category`).
+  - Image: type `url` or `files` (first file/external used for `image`).
+  - Story: type `rich_text` (mapped to `story`).
+  - Emotion: type `rich_text` (mapped to `emotion`).
+  - Message: type `rich_text` (mapped to `message`).
+- Supported property name candidates per field:
+  - Category: `Category`, `카테고리`, `category`, `분류`
+  - Image: `Image`, `이미지`, `image`, `Thumbnail`, `썸네일`
+  - Story: `Story`, `이야기`, `story`
+  - Emotion: `Emotion`, `감정`, `emotion`
+  - Message: `Message`, `메시지`, `message`
+- Client usage: `src/components/PortfolioPage.tsx` fetches `/api/portfolio` on mount,
+  hydrates categories and items, and falls back to local seed data if the request fails.
+
+# Admin Mode
+
+- Detection: Layout checks cookie `admin=1|true` or env `ADMIN_MODE=true`.
+- Toggle via server route:
+  - Enable: visit `/api/admin?on=1` (optional `&redirect=/somepath`).
+  - Disable: visit `/api/admin?off=1`.
+- UI:
+  - When not admin, a tiny amber dot appears bottom-right to enable admin quickly.
+  - When admin, a small “Admin 종료” chip appears bottom-right to disable.
+
+# Tailwind CSS (v4) Notes
+
+- Current setup uses prebuilt `src/index.css`. New classes added in TSX won't apply until CSS is regenerated.
+- Quick fix utilities are added in `src/styles/globals.css` to cover missing classes:
+  - `.fixed`, `.bottom-4`, `.w-3`, `.h-3`, `.bg-amber-25`, `.to-yellow-25`
+  - Variants: `.hover:opacity-100`, `.group-hover:opacity-100`, `.group-hover:bg-black/20`, `.group-hover:scale-110`
+- Recommended: regenerate CSS with Tailwind CLI v4
+  1) Create input: `src/styles/tw.css`
+     - `@import "tailwindcss";`
+     - `@source "../**/*.{ts,tsx}";`
+  2) Build once: `npx @tailwindcss/cli -i src/styles/tw.css -o src/index.css --minify`
+  3) Watch dev: `npx @tailwindcss/cli -i src/styles/tw.css -o src/index.css --watch`
+  4) Ensure your editor saves trigger rebuilds so all used classes appear in `index.css`.
+- If you keep prebuilt CSS, prefer existing tokens (e.g., `w-4/h-4`, `bottom-2`) or extend utilities in `globals.css` as done above.
+
+# Media Storage
+
+- Default: Supabase Storage (public bucket) via `POST /api/admin/upload`.
+- Env vars:
+  - `SUPABASE_URL`: Project URL (e.g., https://xyzcompany.supabase.co)
+  - `SUPABASE_SERVICE_ROLE`: Service role key (server-only)
+  - `SUPABASE_BUCKET`: Bucket name (e.g., `portfolio`)
+  - `SUPABASE_FOLDER`: Optional folder prefix (e.g., `toritori/portfolio`)
+- Flow: Admin uploads file -> API stores to Supabase -> returns public URL -> UI fills image field -> Notion stores URL.
+- Alternative providers: Cloudflare R2, Firebase, Vercel Blob, Cloudinary (commented envs in `.env.local.example`).
