@@ -8,4 +8,10 @@
   Run `npm i` to install the dependencies.
 
   Run `npm run dev` to start the development server.
+
+  ## Environment & Secrets
+
+  - Store private keys in a local file like `.env.local`.
+  - Do not commit `.env*` files; they are ignored via `.gitignore`.
+  - If a secret is ever committed, rotate it immediately and purge it from git history.
   
